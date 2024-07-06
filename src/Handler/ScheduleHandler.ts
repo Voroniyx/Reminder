@@ -3,6 +3,7 @@ import {Reminder, ReminderModel} from "../Database/reminder.js";
 import {ZeitHandler} from "./ZeitHandler.js";
 import {rest} from "../index.js";
 import {APIDMChannel, RESTPostAPIChannelMessageJSONBody} from "discord-api-types/v10";
+import {ColorHandler} from "./ColorHandler.js";
 
 export class ScheduleHandler {
     public static startCronJob() {
@@ -29,11 +30,7 @@ export class ScheduleHandler {
     private static async __run(reminder: Reminder) {
         const reminderSetForData = reminder.lastExecuted === 0 ? ZeitHandler.AddTimeToDate(reminder.created, reminder.zeit) : new Date(reminder.lastExecuted);
 
-        console.log(reminderSetForData.toISOString());
-
         if (Date.now() > reminderSetForData.getTime()) {
-
-            console.log("im if");
 
             //do something because reminder is in the past and should be handeled
             const dmChannel = await rest.post("/users/@me/channels", {
@@ -46,7 +43,8 @@ export class ScheduleHandler {
                 embeds: [
                     {
                         description: `Hey ich sollte die an was erinnern:
-> ${reminder.name}`
+> ${reminder.name}`,
+                        color: ColorHandler.get("Green")
                     }
                 ]
             }
@@ -56,9 +54,6 @@ export class ScheduleHandler {
             })
 
             if (reminder.repeat) {
-                console.log("reminder auf repeat");
-                //set last executed
-
                 //TODO Button hinzufügen der den reminder löscht wenn er auf repeat steht
 
                 await ReminderModel.findOneAndUpdate({
@@ -73,7 +68,6 @@ export class ScheduleHandler {
                 await ReminderModel.deleteOne({
                     reminderId: reminder.reminderId,
                 })
-                console.log("reminder wurde gelöscht");
             }
         }
     }

@@ -23,6 +23,7 @@ import type {
 } from "discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/subcommand";
 import {Response} from "express";
 import {CreateId} from "../Handler/CreateId.js";
+import {ColorHandler} from "../Handler/ColorHandler.js";
 
 export class Reminder {
     public static GetCommandData(): ICommand {
@@ -86,13 +87,13 @@ export class Reminder {
         try {
             if (data.context === v10InteractionContextType.BotDM || data.context === v10InteractionContextType.PrivateChannel) {
                 data = data as APIChatInputApplicationCommandDMInteraction;
-                if (data.data.options.find(x => x.name === "view").name === "view") {
+                if (data.data.options.find(x => x.name === "view")) {
                     return Reminder.handleViewSubCommand(data.user.id);
                 }
-                if (data.data.options.find(x => x.name === "create").name === "create") {
+                if (data.data.options.find(x => x.name === "create")) {
                     return Reminder.handleCreateSubCommand(data.user.id, data.data.options);
                 }
-                if (data.data.options.find(x => x.name === "remove").name === "remove") {
+                if (data.data.options.find(x => x.name === "remove")) {
                     return Reminder.handleRemoveSubCommand(data.user.id, data.data.options);
                 }
             }
@@ -164,9 +165,10 @@ export class Reminder {
         return {
             embeds: [
                 {
+                    color: ColorHandler.get("Yellow"),
                     description: [
                         "## Deine Erinnerungen",
-                        ...reminders.map(x => `${ZeitHandler.ToZeitStr(x.zeit)} ${x.name.slice(0, 52)}`),
+                        reminders.length === 0 ? "Du hast keine Erinnerungen" : reminders.map((x, i) => `\`${i++}\` [<t:${ZeitHandler.AddTimeToDate(x.created, x.zeit).getTime() / 1000 | 0}:F>] ${x.name.slice(0, 28)}...`),
                     ].join("\n"),
                 }
             ]
@@ -193,12 +195,13 @@ export class Reminder {
         return {
             embeds: [
                 {
+                    color: ColorHandler.get("Yellow"),
                     description: [
                         "## Erinnerung erstellt:",
-                        `Name: ${createdReminder.name}`,
-                        `Zeit: ${ZeitHandler.ToZeitStr(createdReminder.zeit)}`,
-                        `Erstellt: <t:${createdReminder.created / 1000 | 0}:F>`,
-                        `Wiederholen: ${createdReminder.repeat ? "Ja" : "Nein"}`
+                        `**Name:** ${createdReminder.name}`,
+                        `**Zeit:** ${ZeitHandler.ToZeitStr(createdReminder.zeit)}`,
+                        `**Erstellt:** <t:${createdReminder.created / 1000 | 0}:F>`,
+                        `**Wiederholen:** ${createdReminder.repeat ? "Ja" : "Nein"}`
                     ].join("\n"),
                 }
             ]
@@ -219,6 +222,7 @@ export class Reminder {
                         description: [
                             `Erinnerung wurde gelöscht!`,
                         ].join("\n"),
+                        color: ColorHandler.get("Green")
                     }
                 ]
             };
@@ -229,6 +233,7 @@ export class Reminder {
                         description: [
                             "Erinnerung wurde nicht gelöscht!",
                         ].join("\n"),
+                        color: ColorHandler.get("Red")
                     }
                 ]
             };
