@@ -6,6 +6,7 @@ import { Reminder } from "./Commands/reminder.js";
 import { CommandHandler } from "./Handler/CommandHandler.js";
 import { REST } from "@discordjs/rest";
 import { connect, set } from "mongoose";
+import { ScheduleHandler } from "./Handler/ScheduleHandler.js";
 dotenv.config();
 export const rest = new REST({ version: '10' }).setToken(process.env.DISCORD_TOKEN);
 set('strictQuery', true);
@@ -30,7 +31,7 @@ app.post('/interactions', verifyKeyMiddleware(process.env.DISCORD_CLIENT_KEY), a
             return await CommandHandler.processCommand(body, res);
         }
         case InteractionType.ApplicationCommandAutocomplete: {
-            return await Reminder.autoComplete(body);
+            return await Reminder.autoComplete(body, res);
         }
         default: {
             return res.sendStatus(401);
@@ -40,6 +41,8 @@ app.post('/interactions', verifyKeyMiddleware(process.env.DISCORD_CLIENT_KEY), a
 app.listen(PORT, () => {
     console.log('Listening on port', PORT);
 });
+ScheduleHandler.startUpRun().then(() => console.log("ScheduleHandler startup run"));
+ScheduleHandler.startCronJob();
 process.on("unhandledRejection", async (reason) => {
     console.error(reason);
 });

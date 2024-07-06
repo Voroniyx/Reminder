@@ -3,8 +3,10 @@ import mongoose from 'mongoose';
 const ReminderSchema = new mongoose.Schema({
     userId: { type: String, default: "" },
     reminderId: { type: String, default: "" },
+    created: { type: Number, default: 0 },
     name: { type: String, default: "" },
     repeat: { type: Boolean, default: false },
+    lastExecuted: { type: Number, default: 0 },
     zeit: {
         Stunden: { type: Number, default: 0 },
         Minuten: { type: Number, default: 0 },

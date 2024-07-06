@@ -16,10 +16,9 @@ export class ScheduleHandler {
         reminders.forEach(async (reminder) => await this.__run(reminder));
     }
     static async __run(reminder) {
-        const created = Number.parseInt(reminder.reminderId);
-        const reminderSetForData = reminder.lastExecuted === 0 ? ZeitHandler.AddTimeToDate(created, reminder.zeit) : new Date(reminder.lastExecuted);
+        const reminderSetForData = reminder.lastExecuted === 0 ? ZeitHandler.AddTimeToDate(reminder.created, reminder.zeit) : new Date(reminder.lastExecuted);
         if (Date.now() > reminderSetForData.getTime()) {
-            //do something because reminder is in the past and should be handeld
+            //do something because reminder is in the past and should be handeled
             const dmChannel = await rest.post("/users/@me/channels", {
                 body: {
                     recipient_id: reminder.userId

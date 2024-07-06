@@ -25,14 +25,29 @@ export class ZeitHandler {
     static ToZeitStr(zeit) {
         let result = "";
         if (zeit.Tage !== undefined && zeit.Tage > 0) {
-            result += `${zeit.Tage}d`;
+            result += `${zeit.Tage}d `;
         }
         if (zeit.Stunden !== undefined && zeit.Stunden > 0) {
-            result += `${zeit.Stunden}h`;
+            result += `${zeit.Stunden}h `;
         }
         if (zeit.Minuten !== undefined && zeit.Minuten > 0) {
-            result += `${zeit.Minuten}m`;
+            result += `${zeit.Minuten}m `;
         }
         return result;
+    }
+    static AddTimeToDate(timestamp, zeit) {
+        // Erstelle ein neues Date-Objekt aus dem timestamp
+        const date = new Date(timestamp);
+        // Extrahiere die Stunden, Minuten und Tage aus dem zeit-Objekt, falls sie vorhanden sind
+        const stunden = zeit.Stunden || 0;
+        const minuten = zeit.Minuten || 0;
+        const tage = zeit.Tage || 0;
+        // Addiere die Tage
+        date.setDate(date.getDate() + tage);
+        // Addiere die Stunden
+        date.setHours(date.getHours() + stunden);
+        // Addiere die Minuten
+        date.setMinutes(date.getMinutes() + minuten);
+        return date;
     }
 }
