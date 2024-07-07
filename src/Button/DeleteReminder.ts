@@ -38,7 +38,7 @@ export class DeleteReminder {
                 embeds: [
                     {
                         color:ColorHandler.get("Green"),
-                        description: "Ich konnte den Reminder nicht löschen. Bitte probiere es erneut."
+                        description: "Ich habe deinen Reminder gelöscht."
                     }
                 ]
             }
