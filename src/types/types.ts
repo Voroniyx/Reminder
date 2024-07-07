@@ -2,7 +2,7 @@ import {
     APIApplicationCommandAutocompleteDMInteraction, APIApplicationCommandAutocompleteGuildInteraction,
     APIApplicationCommandAutocompleteInteraction,
     APIChatInputApplicationCommandDMInteraction,
-    APIChatInputApplicationCommandGuildInteraction, APIPingInteraction
+    APIChatInputApplicationCommandGuildInteraction, APIMessageComponentButtonInteraction, APIPingInteraction
 } from "discord-api-types/v10";
 
 export enum ApplicationCommandType {
@@ -64,4 +64,5 @@ export type BodyType = APIChatInputApplicationCommandGuildInteraction
     | APIChatInputApplicationCommandDMInteraction
     | APIApplicationCommandAutocompleteDMInteraction
     | APIApplicationCommandAutocompleteGuildInteraction
+    | APIMessageComponentButtonInteraction
     | APIPingInteraction;

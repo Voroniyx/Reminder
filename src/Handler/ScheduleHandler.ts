@@ -32,17 +32,19 @@ export class ScheduleHandler {
 
         if (Date.now() > reminderSetForData.getTime()) {
 
-            //do something because reminder is in the past and should be handeled
+            //do something because reminder is in the past and should be handled
             const dmChannel = await rest.post("/users/@me/channels", {
                 body: {
                     recipient_id: reminder.userId
                 }
             }) as APIDMChannel
 
+            //TODO Button hinzufügen der den reminder löscht wenn er auf repeat steht
+
             const msgData: RESTPostAPIChannelMessageJSONBody = {
                 embeds: [
                     {
-                        description: `Hey ich sollte die an was erinnern:
+                        description: `Hey ich sollte dich an was erinnern:
 > ${reminder.name}`,
                         color: ColorHandler.get("Green")
                     }
@@ -54,8 +56,6 @@ export class ScheduleHandler {
             })
 
             if (reminder.repeat) {
-                //TODO Button hinzufügen der den reminder löscht wenn er auf repeat steht
-
                 await ReminderModel.findOneAndUpdate({
                     reminderId: reminder.reminderId,
                 }, {

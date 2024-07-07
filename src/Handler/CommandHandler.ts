@@ -1,4 +1,4 @@
-import {BodyType, ICommand} from "../types/types.js";
+import {ICommand} from "../types/types.js";
 import {Response} from "express";
 import {
     APIChatInputApplicationCommandDMInteraction, APIChatInputApplicationCommandGuildInteraction,
@@ -6,7 +6,7 @@ import {
     InteractionResponseType,
     MessageFlags
 } from "discord-api-types/v10";
-import {Reminder} from "../Commands/reminder.js";
+import {Reminder} from "../Commands/Reminder";
 import {rest} from "../index.js";
 
 export class CommandHandler {
@@ -46,9 +46,10 @@ export class CommandHandler {
             },
         });
 
+        //Execute the command and get the msg data
         const commandResponse = await Reminder.execute(body);
 
-        //Step 3
+        //Update the msg with the commandResponse
         await rest.patch(
             `/webhooks/${body.application_id}/${body.token}/messages/@original`,
             {

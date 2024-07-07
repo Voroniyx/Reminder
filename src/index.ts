@@ -1,15 +1,14 @@
 import * as dotenv from "dotenv";
 import express from 'express';
 import {InteractionResponseType, verifyKeyMiddleware} from 'discord-interactions';
-import {
-    InteractionType
-} from "discord-api-types/v10";
-import {Reminder} from "./Commands/reminder.js";
+import {InteractionType} from "discord-api-types/v10";
+import {Reminder} from "./Commands/Reminder";
 import {BodyType} from "./types/types.js";
 import {CommandHandler} from "./Handler/CommandHandler.js";
 import {REST} from "@discordjs/rest";
 import {connect, set} from "mongoose";
 import {ScheduleHandler} from "./Handler/ScheduleHandler.js";
+import {ButtonHandler} from "./Handler/ButtonHandler";
 
 dotenv.config();
 
@@ -26,7 +25,7 @@ const PORT = process.env.PORT || 3000;
 // Parse request body and verifies incoming requests using discord-interactions package
 // app.use(express.json({verify: VerifyDiscordRequest.run}));
 
-app.get("/", (req, res) => {res.sendStatus(200)});
+app.get("/", (_, res) => {res.sendStatus(200)});
 
 /**
  * Interactions endpoint URL where Discord will send HTTP requests
@@ -46,6 +45,10 @@ app.post('/interactions', verifyKeyMiddleware(process.env.DISCORD_CLIENT_KEY), a
 
         case InteractionType.ApplicationCommandAutocomplete: {
             return await Reminder.autoComplete(body, res)
+        }
+
+        case InteractionType.MessageComponent: {
+            return await ButtonHandler.processButton(body, res);
         }
 
         default: {
