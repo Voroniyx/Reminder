@@ -44,4 +44,5 @@ Wähle eine dieser Befehle aus und wenn du eine Antwort vom Bot bekommst, hast d
 
 
 ### Sonstiges
-Ich habe das Projekt an einem Abend zusammen gebaut. 
+Ich habe das Projekt an einem Abend zusammen gebaut. Weshalb es vielleicht auch danach aussieht im Code. 
+Vielleicht werde ich das Projekt beizeiten nochmal aufräumen :)
