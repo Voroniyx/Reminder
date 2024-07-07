@@ -9,11 +9,12 @@ import {REST} from "@discordjs/rest";
 import {connect, set} from "mongoose";
 import {ScheduleHandler} from "./Handler/ScheduleHandler.js";
 import {ButtonHandler} from "./Handler/ButtonHandler.js";
+import {LangHandler} from "./Handler/LangHandler.js";
 
 dotenv.config();
 
 export const rest = new REST({version: '10'}).setToken(process.env.DISCORD_TOKEN);
-
+export const lang = new LangHandler();
 
 set('strictQuery', true);
 await connect(process.env.MONGO_TOKEN).then(() => console.log('[Database] Successfully Connected and Loaded Database'));

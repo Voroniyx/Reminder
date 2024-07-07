@@ -1,0 +1,62 @@
+[
+  {
+    "key": "yes",
+    "value": "Yes"
+  },
+  {
+    "key": "no",
+    "value": "No"
+  },
+  {
+    "key": "settings.command.view.title",
+    "value": "## Your settings"
+  },
+  {
+    "key": "settings.command.view.lang",
+    "value": "Language:"
+  },
+  {
+    "key": "reminder.button.delete.fail",
+    "value": "I could not delete the reminder. Please try again."
+  },
+  {
+    "key": "reminder.button.delete.success",
+    "value": "I have deleted the reminder."
+  },
+  {
+    "key": "reminder.button.title",
+    "value": "Delete reminder"
+  },
+  {
+    "key": "reminder.command.view.title",
+    "value": "## Your reminders"
+  },
+  {
+    "key": "reminder.command.view.no_reminder",
+    "value": "You have no reminders"
+  },
+  {
+    "key": "reminder.command.create.title",
+    "value": "## Reminder was created"
+  },
+  {
+    "key": "reminder.command.create.name",
+    "value": "**Name:**"
+  },
+  {
+    "key": "reminder.command.create.time",
+    "value": "**Time:**"
+  },
+  {
+    "key": "reminder.command.create.created",
+    "value": "**Created:**"
+  },
+  {
+    "key": "reminder.command.create.repeat",
+    "value": "**Repeat:**"
+  },
+  {
+    "key": "reminder.scheduler.execute.description",
+    "value": "Hey, I should remind you of something:"
+  }
+]

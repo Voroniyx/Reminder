@@ -22,52 +22,54 @@ import type {
     APIApplicationCommandInteractionDataSubcommandOption
 } from "discord-api-types/payloads/v10/_interactions/_applicationCommands/_chatInput/subcommand";
 import {Response} from "express";
-import {CreateId} from "../Handler/CreateId.js";
+import {IdHandler} from "../Handler/IdHandler.js";
 import {ColorHandler} from "../Handler/ColorHandler.js";
+import {getSettingsOrCreateOne} from "../Database/settings.js";
+import {lang} from "../index.js";
 
 export class Reminder {
     public static GetCommandData(): ICommand {
         return {
             type: ApplicationCommandType.CHAT_INPUT,
             contexts: [InteractionContextType.BOT_DM, InteractionContextType.GUILD, InteractionContextType.PRIVATE_CHANNEL],
-            description: "Verwalte deine Reminder",
+            description: "Manage your reminders",
             name: "reminder",
             integration_types: [ApplicationIntegrationType.USER_INSTALL],
             options: [
                 {
                     type: ApplicationCommandOptionType.SUB_COMMAND,
                     name: "create",
-                    description: "Erstelle eine neuen Reminder",
+                    description: "Create a new reminder",
                     options: [
                         {
                             type: ApplicationCommandOptionType.STRING,
-                            name: "zeit",
-                            description: "In wie vielen Tagen/Stunden/Minuten soll ich dich erinnern?",
+                            name: "time",
+                            description: "In how many days/hours/minutes should I remind you?",
                             required: true,
                         },
                         {
                             type: ApplicationCommandOptionType.STRING,
                             name: "name",
-                            description: "Woran soll ich dich erinnern?",
+                            description: "What do you want me to remind you of?",
                             required: true,
                         },
                         {
                             type: ApplicationCommandOptionType.BOOLEAN,
-                            name: "wiederholen",
-                            description: "Soll ich dich nach der Zeit erneut erinnern?",
+                            name: "repeat",
+                            description: "Shall I remind you again after the time?",
                             required: false,
                         },
                     ]
                 },
                 {
                     name: "remove",
-                    description: "Entfernt eine Erinnerung.",
+                    description: "Removes a reminder.",
                     type: ApplicationCommandOptionType.SUB_COMMAND,
                     options: [
                         {
                             type: ApplicationCommandOptionType.STRING,
                             name: "reminder",
-                            description: "Die Erinnerung die Entfernt werden soll",
+                            description: "The reminder to be removed",
                             autocomplete: true,
                             required: true,
                         }
@@ -76,7 +78,7 @@ export class Reminder {
                 {
                     type: ApplicationCommandOptionType.SUB_COMMAND,
                     name: "view",
-                    description: "Sie eine Liste deiner Erinnerung",
+                    description: "Shows your reminders",
                 }
             ]
         }
@@ -161,14 +163,17 @@ export class Reminder {
 
     private static async handleViewSubCommand(userId: string): Promise<APIInteractionResponseCallbackData> {
         const reminders = await ReminderModel.find({userId: userId});
+        const settings = await getSettingsOrCreateOne(userId);
 
         return {
             embeds: [
                 {
                     color: ColorHandler.get("Yellow"),
                     description: [
-                        "## Deine Erinnerungen",
-                        reminders.length === 0 ? "Du hast keine Erinnerungen" : reminders.map((x, i) => `\`${i++}\` [<t:${ZeitHandler.AddTimeToDate(x.created, x.zeit).getTime() / 1000 | 0}:F>] ${x.name.slice(0, 28)}...`),
+                        lang.get("reminder.command.view.title",settings.lang),
+                        reminders.length === 0 ?
+                            lang.get("reminder.command.view.no_reminder",settings.lang)
+                            : reminders.map((x, i) => `\`${i + 1}\` ${ZeitHandler.ToZeitStr(x.zeit)} [<t:${ZeitHandler.AddTimeToDate(x.created, x.zeit).getTime() / 1000 | 0}:F>] ${x.name.slice(0, 28)}`).join("\n"),
                     ].join("\n"),
                 }
             ]
@@ -176,16 +181,18 @@ export class Reminder {
     }
 
     private static async handleCreateSubCommand(userId: string, data: APIApplicationCommandInteractionDataOption[]): Promise<APIInteractionResponseCallbackData> {
+        const settings = await getSettingsOrCreateOne(userId);
+
         const options = (data.find(x => x.name === "create") as APIApplicationCommandInteractionDataSubcommandOption).options;
 
         const name = options.find(x => x.name === "name");
-        const zeit = options.find(x => x.name === "zeit");
-        const wiederholen = options.find(x => x.name === "wiederholen");
+        const zeit = options.find(x => x.name === "time");
+        const wiederholen = options.find(x => x.name === "repeat");
 
         const createdReminder = await ReminderModel.create({
             name: name.value,
             userId: userId,
-            reminderId: CreateId.create(),
+            reminderId: IdHandler.create(),
             created: Date.now(),
             zeit: ZeitHandler.ToZeit(zeit.value as string),
             repeat: wiederholen?.value === undefined ? false : wiederholen.value,
@@ -197,11 +204,13 @@ export class Reminder {
                 {
                     color: ColorHandler.get("Yellow"),
                     description: [
-                        "## Erinnerung erstellt:",
-                        `**Name:** ${createdReminder.name}`,
-                        `**Zeit:** ${ZeitHandler.ToZeitStr(createdReminder.zeit)}`,
-                        `**Erstellt:** <t:${createdReminder.created / 1000 | 0}:F>`,
-                        `**Wiederholen:** ${createdReminder.repeat ? "Ja" : "Nein"}`
+                        lang.get("reminder.command.create.title",settings.lang),
+                        `${lang.get("reminder.command.create.name",settings.lang)} ${createdReminder.name}`,
+                        `${lang.get("reminder.command.create.time",settings.lang)} ${ZeitHandler.ToZeitStr(createdReminder.zeit)}`,
+                        `${lang.get("reminder.command.create.created",settings.lang)} <t:${createdReminder.created / 1000 | 0}:F>`,
+                        `${lang.get("reminder.command.create.repeat",settings.lang)} ${createdReminder.repeat ?
+                            lang.get("yes",settings.lang)
+                            : lang.get("no",settings.lang)}`
                     ].join("\n"),
                 }
             ]
@@ -209,6 +218,8 @@ export class Reminder {
     }
 
     private static async handleRemoveSubCommand(userId: string, data: APIApplicationCommandInteractionDataOption[]): Promise<APIInteractionResponseCallbackData> {
+        const settings = await getSettingsOrCreateOne(userId);
+
         const options = (data.find(x => x.name === "remove") as APIApplicationCommandInteractionDataSubcommandOption).options;
 
         const reminder = options.find(x => x.name === "reminder");
@@ -219,20 +230,17 @@ export class Reminder {
             return {
                 embeds: [
                     {
-                        description: [
-                            `Erinnerung wurde gelöscht!`,
-                        ].join("\n"),
+                        description:lang.get("reminder.button.delete.success",settings.lang),
                         color: ColorHandler.get("Green")
                     }
                 ]
             };
         } else {
+
             return {
                 embeds: [
                     {
-                        description: [
-                            "Erinnerung wurde nicht gelöscht!",
-                        ].join("\n"),
+                        description:lang.get("reminder.button.delete.fail",settings.lang),
                         color: ColorHandler.get("Red")
                     }
                 ]

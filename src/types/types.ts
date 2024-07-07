@@ -1,6 +1,6 @@
 import {
-    APIApplicationCommandAutocompleteDMInteraction, APIApplicationCommandAutocompleteGuildInteraction,
-    APIApplicationCommandAutocompleteInteraction,
+    APIApplicationCommandAutocompleteDMInteraction,
+    APIApplicationCommandAutocompleteGuildInteraction,
     APIChatInputApplicationCommandDMInteraction,
     APIChatInputApplicationCommandGuildInteraction, APIMessageComponentButtonInteraction, APIPingInteraction
 } from "discord-api-types/v10";

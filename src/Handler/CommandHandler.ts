@@ -8,9 +8,12 @@ import {
 } from "discord-api-types/v10";
 import {Reminder} from "../Commands/Reminder.js";
 import {rest} from "../index.js";
+import {Settings} from "../Commands/Settings.js";
 
 export class CommandHandler {
     public static async install(commands: ICommand[]) {
+        console.log("Deploying Commands");
+
         const url = `https://discord.com/api/v10/applications/${process.env.APP_ID}/commands`;
 
         let formatedCommands: string = "";
@@ -33,6 +36,8 @@ export class CommandHandler {
             console.log(res.status);
             throw new Error(JSON.stringify(data));
         }
+        console.log("Deploying commands successful");
+
         // return original response
         return res;
     }
@@ -46,8 +51,18 @@ export class CommandHandler {
             },
         });
 
-        //Execute the command and get the msg data
-        const commandResponse = await Reminder.execute(body);
+        let commandResponse = {};
+
+        switch (body.data.name) {
+            case 'settings': {
+                commandResponse = await Settings.execute(body);
+                break;
+            }
+            case 'reminder': {
+                commandResponse = await Reminder.execute(body);
+                break;
+            }
+        }
 
         //Update the msg with the commandResponse
         await rest.patch(

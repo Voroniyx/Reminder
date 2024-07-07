@@ -1,0 +1,62 @@
+[
+  {
+    "key": "yes",
+    "value": "Ja"
+  },
+  {
+    "key": "no",
+    "value": "Nein"
+  },
+  {
+    "key": "settings.command.view.title",
+    "value": "## Deine Einstellungen"
+  },
+  {
+    "key": "settings.command.view.lang",
+    "value": "Sprache:"
+  },
+  {
+    "key": "reminder.button.delete.fail",
+    "value": "Ich konnte die Erinnerung nicht löschen. Bitte probiere es erneut."
+  },
+  {
+    "key": "reminder.button.delete.success",
+    "value": "Ich habe die Erinnerung gelöscht."
+  },
+  {
+    "key": "reminder.button.title",
+    "value": "Erinnerung löschen"
+  },
+  {
+    "key": "reminder.command.view.title",
+    "value": "## Deine Erinnerungen"
+  },
+  {
+    "key": "reminder.command.view.no_reminder",
+    "value": "Du hast keine Erinnerungen"
+  },
+  {
+    "key": "reminder.command.create.title",
+    "value": "## Erinnerung wurde erstellt"
+  },
+  {
+    "key": "reminder.command.create.name",
+    "value": "**Name:**"
+  },
+  {
+    "key": "reminder.command.create.time",
+    "value": "**Zeit:**"
+  },
+  {
+    "key": "reminder.command.create.created",
+    "value": "**Erstellt:**"
+  },
+  {
+    "key": "reminder.command.create.repeat",
+    "value": "**Wiederholen:**"
+  },
+  {
+    "key": "reminder.scheduler.execute.description",
+    "value": "Hey ich sollte dich an was erinnern:"
+  }
+]

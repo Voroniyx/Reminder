@@ -6,6 +6,8 @@ import {
 } from "discord-api-types/v10";
 import {ReminderModel} from "../Database/reminder.js";
 import {ColorHandler} from "../Handler/ColorHandler.js";
+import {getSettingsOrCreateOne} from "../Database/settings.js";
+import {lang} from "../index.js";
 
 export class DeleteReminder {
     public static getButtonData(reminderId: string): APIButtonComponentWithCustomId {
@@ -20,12 +22,15 @@ export class DeleteReminder {
     public static async execute(data: APIMessageComponentButtonInteraction):Promise<APIInteractionResponseCallbackData> {
         const reminderId = data.data.custom_id.split(":")[3];
         const reminder = ReminderModel.findOne({reminderId: reminderId});
+        const userId = data.user.id;
+        const userSettings = await getSettingsOrCreateOne(userId);
+
         if(!reminder) {
             return {
                 embeds: [
                     {
                         color:ColorHandler.get("Red"),
-                        description: "Ich konnte den Reminder nicht löschen. Bitte probiere es erneut."
+                        description: lang.get("reminder.button.delete.fail",userSettings.lang)
                     }
                 ]
             }
@@ -38,7 +43,7 @@ export class DeleteReminder {
                 embeds: [
                     {
                         color:ColorHandler.get("Green"),
-                        description: "Ich habe deinen Reminder gelöscht."
+                        description: lang.get("reminder.button.delete.success",userSettings.lang)
                     }
                 ]
             }
@@ -47,7 +52,7 @@ export class DeleteReminder {
                 embeds: [
                     {
                         color:ColorHandler.get("Red"),
-                        description: "Ich konnte den Reminder nicht löschen. Bitte probiere es erneut."
+                        description: lang.get("reminder.button.delete.fail",userSettings.lang)
                     }
                 ]
             }

@@ -1,6 +1,6 @@
 import { randomBytes } from 'crypto';
 
-export class CreateId {
+export class IdHandler {
     public static create() {
         const length = 36;
         const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
