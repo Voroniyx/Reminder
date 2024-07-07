@@ -2,13 +2,13 @@ import * as dotenv from "dotenv";
 import express from 'express';
 import {InteractionResponseType, verifyKeyMiddleware} from 'discord-interactions';
 import {InteractionType} from "discord-api-types/v10";
-import {Reminder} from "./Commands/Reminder";
+import {Reminder} from "./Commands/Reminder.js";
 import {BodyType} from "./types/types.js";
 import {CommandHandler} from "./Handler/CommandHandler.js";
 import {REST} from "@discordjs/rest";
 import {connect, set} from "mongoose";
 import {ScheduleHandler} from "./Handler/ScheduleHandler.js";
-import {ButtonHandler} from "./Handler/ButtonHandler";
+import {ButtonHandler} from "./Handler/ButtonHandler.js";
 
 dotenv.config();
 

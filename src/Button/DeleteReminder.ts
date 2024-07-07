@@ -4,8 +4,8 @@ import {
     ButtonStyle,
     ComponentType
 } from "discord-api-types/v10";
-import {ReminderModel} from "../Database/reminder";
-import {ColorHandler} from "../Handler/ColorHandler";
+import {ReminderModel} from "../Database/reminder.js";
+import {ColorHandler} from "../Handler/ColorHandler.js";
 
 export class DeleteReminder {
     public static getButtonData(reminderId: string): APIButtonComponentWithCustomId {

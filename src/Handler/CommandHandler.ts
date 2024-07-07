@@ -6,7 +6,7 @@ import {
     InteractionResponseType,
     MessageFlags
 } from "discord-api-types/v10";
-import {Reminder} from "../Commands/Reminder";
+import {Reminder} from "../Commands/Reminder.js";
 import {rest} from "../index.js";
 
 export class CommandHandler {

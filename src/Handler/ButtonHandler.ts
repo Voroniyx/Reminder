@@ -6,7 +6,7 @@ import {
     MessageFlags
 } from "discord-api-types/v10";
 import {rest} from "../index.js";
-import {DeleteReminder} from "../Button/DeleteReminder";
+import {DeleteReminder} from "../Button/DeleteReminder.js";
 
 export class ButtonHandler {
     public static async processButton(body: APIMessageComponentButtonInteraction, res: Response<APIInteractionResponse>) {

@@ -2,8 +2,9 @@ import {CronJob} from "cron";
 import {Reminder, ReminderModel} from "../Database/reminder.js";
 import {ZeitHandler} from "./ZeitHandler.js";
 import {rest} from "../index.js";
-import {APIDMChannel, RESTPostAPIChannelMessageJSONBody} from "discord-api-types/v10";
+import {APIDMChannel, ComponentType, RESTPostAPIChannelMessageJSONBody} from "discord-api-types/v10";
 import {ColorHandler} from "./ColorHandler.js";
+import {DeleteReminder} from "../Button/DeleteReminder.js";
 
 export class ScheduleHandler {
     public static startCronJob() {
@@ -42,6 +43,14 @@ export class ScheduleHandler {
             //TODO Button hinzufügen der den reminder löscht wenn er auf repeat steht
 
             const msgData: RESTPostAPIChannelMessageJSONBody = {
+                components: [
+                    {
+                        type: ComponentType.ActionRow,
+                        components: [
+                            DeleteReminder.getButtonData(reminder.reminderId)
+                        ]
+                    }
+                ],
                 embeds: [
                     {
                         description: `Hey ich sollte dich an was erinnern:
