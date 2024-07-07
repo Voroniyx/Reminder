@@ -55,7 +55,7 @@ export class ScheduleHandler {
                 {
                     type: ComponentType.ActionRow,
                     components: [
-                        DeleteReminder.getButtonData(reminder.reminderId)
+                        DeleteReminder.getButtonData(reminder.reminderId, settings.lang)
                     ]
                 }
             ]

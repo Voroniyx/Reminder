@@ -10,12 +10,12 @@ import {getSettingsOrCreateOne} from "../Database/settings.js";
 import {lang} from "../index.js";
 
 export class DeleteReminder {
-    public static getButtonData(reminderId: string): APIButtonComponentWithCustomId {
+    public static getButtonData(reminderId: string, langCode:string): APIButtonComponentWithCustomId {
         return {
             type: ComponentType.Button,
             custom_id: `button:reminder:delete:${reminderId}`,
             style: ButtonStyle.Primary,
-            label: 'Erinnerung löschen',
+            label: lang.get("reminder.button.title", langCode),
         }
     }
 
