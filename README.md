@@ -8,7 +8,7 @@ Erinnerungen können im Minuten / Stunden und Tage takt erstellt werden und kön
 
 Als Datenbank wird MongoDb benutzt.
 
-## Warning
+## ⚠️ Warnung
 
 Die App mag gegebenfalls vom Discords AntiSpam System in Quarantäne gesetzt werden, wenn sie zu vielen verschieden Usern eine Direkt Nachricht sendet. Ich empfehle deshalb sie nur für Private zwecke zu nutzen und im Developer Portal als Privat zu markieren.
 Sofern sie die mindestens eine Direkt Nachricht gesendet hat, kann sie dir auch weiterhin DMs senden nur keinen neuen Personen mehr.
